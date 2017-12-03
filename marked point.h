@@ -22,7 +22,7 @@ public:
 	int gettime2() { return time2; };
 	void setfrontpoint(point*_frontpoint) {front_point = _frontpoint;};
 	pair<int, int>get_time_wind_(point*nextpoint);
-  queue <point>get_ingvisit_point(point *point_);
+        queue <point>get_ingvisit_point(point *point_);
 	void push_ingvisit_point(point*nextpoint);    //将可行的下个点放进要访问的队列，插入队尾
 	void getvisited_point(queue<point*>ingvisit_point);     //队列头出队，设为visited_point; 下一步插入visited_point的vector
 	void pushvisited_point(marked_point*visited_point);   //用pushback函数将新访问的点插入；
