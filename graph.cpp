@@ -42,3 +42,4 @@ void graph::creat_graph(int node_num, vector<int>&nodes, vector<vector<int>>&edg
 	}
 }
 
+
