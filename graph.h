@@ -22,3 +22,4 @@ public:
 	vector<int>getrow(int nodenum, int m,vector<vector<int>>&edge_set);
 	void creat_graph(int node_num, vector<int>&nodes, vector<vector<int>>&edge_sets);
 };
+
