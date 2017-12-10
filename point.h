@@ -1,8 +1,6 @@
-
 #include<vector>
-#include<array>
 #include<stdio.h>
-using namespace std; 
+using namespace std;
 
 
 
@@ -10,25 +8,23 @@ class point              // 每个点的基本信息：位置，编号，访问�
 {
 private:
 	int x;
-	int y;    
-	int index;   //点的标号
-	int state;  //访问状态
-	array<int,18> wind;      //(3:00-21:00)
-	//vector <point>cangotopoints_;  
-	vector <point>adjcentpoints_;
-	pair<int, int>time_wind_;
+	int y;
+	int index;             //点的标号
+	int state;             //访问状态
+	vector<pair<int, int>>time_wind_;   //时刻风速
+	vector<point*>adjcentpoints;
 
-public:                             
+public:
 	point();
 	int get_x() { return x; };
 	int get_y() { return y; };
 	int getindex(int x, int y);
-	int get_wind_(point*point_);
-	int time_wind_.first();
+
+	vector<pair<int, int>>set_time_wind_(int a);
+	vector<pair<int, int>>get_time_wind() { return time_wind_; }
+	pair<int,int> get_the_time_wind_(vector<pair<int, int>>time_wind_,int time);     //输入time 得到一组time_wind_
 	void setstate(int a) { state = a;}
 	int getstate() { return state;}
-	vector<point> get_adjcentpoints();
-
-
+	void pushadjcentpoint(point*point_) { adjcentpoints.push_back(point_); };
+	vector<point*> get_adjcentpoints(point*point_);
 };
-

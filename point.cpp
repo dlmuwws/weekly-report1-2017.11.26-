@@ -1,5 +1,6 @@
 #include "point.h"
 #include<stdio.h>
+#include"list.h"
 using namespace std;
 
 point::point()
@@ -29,12 +30,52 @@ int point::getindex(int x,int y)
 	return index;
 }
 
-vector <point>point::get_adjcentpoints()
+pair<int,int> point::get_the_time_wind_(vector<pair<int, int>>time_wind_, int time)
 {
-
+	pair<int,int> the_time_wind_ = time_wind_.at(time);
+	return the_time_wind_;
 }
 
-int point::get_wind_(point*point_)
+
+vector <point*>point::get_adjcentpoints(point* point_)
 {
-	int wind = point_->time_wind_.second();
+	    list*pointlist;
+		int x = point_->get_x();
+		int y = point_->get_y();
+
+		int index = point_->getindex(x - 1, y);      //左
+		if (index !=-1)
+		{
+			point_->pushadjcentpoint(pointlist->getpoint(index));
+		}
+
+		int index = point_->getindex(x +1, y);     //右
+		if (index != -1)
+		{
+			point_->pushadjcentpoint(pointlist->getpoint(index));
+		}
+
+		int index = point_->getindex(x , y+1);   //上
+		if (index != -1)
+		{
+			point_->pushadjcentpoint(pointlist->getpoint(index));
+		}
+
+		int index = point_->getindex(x , y-1);  //下
+		if (index != -1)
+		{
+			point_->pushadjcentpoint(pointlist->getpoint(index));
+		}
+}
+
+
+vector<pair<int, int>>point::set_time_wind_(int a)     //a 表示有几组数据
+{
+	int time = 0;
+	for (int i=1;i<=a;i++)
+	{
+		time_wind_.at(i).first = time;
+		time_wind_.at(i).second = 10+rand() % 10;     //随机生成10-20内的数
+		time = time + 2;
+	}
 }
