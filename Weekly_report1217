@@ -1,0 +1,7 @@
+本周完成：
+1.生成用于训练的数据集，给（x,y,hour）点贴上地理位置标签与准确度标签；
+2.预习第六章的内容；
+3.了解Kmeans的基本原理并用matlab根据Kmeans进行图像分割；
+下周计划：
+1.继续学习Linear Programming第六章的内容；
+2.使用Cplex完成简单sample;
