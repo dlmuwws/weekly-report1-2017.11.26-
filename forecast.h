@@ -34,3 +34,4 @@ public:
 	int getDay4Accuracy(pair<int, int>position);
 	int getDay5Accuracy(pair<int, int>position);
 };
+
