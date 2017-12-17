@@ -241,3 +241,4 @@ int forecast::getDay5Accuracy(pair<int, int>position) {
 	}
 	return type;
 }
+
