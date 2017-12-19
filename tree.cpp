@@ -68,3 +68,4 @@ tree::~tree()
 {
 	root->delete_node();
 }
+

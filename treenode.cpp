@@ -110,3 +110,4 @@ void node::aft_traverse()               //后序遍历（左右根）
 	}
 	cout << this->index << "   " << this->data << endl;
 }
+
