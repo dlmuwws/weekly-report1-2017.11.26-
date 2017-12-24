@@ -7,15 +7,6 @@ using namespace std;
 #define INF 9999
 
 
-bool campare(int a, int b)
-{
-	if (a <b)
-		return true;
-	else
-		return false;
-}
-
-
 int prim(vector<vector<int>>&graph)
 {
 	int treecost = 0;
@@ -153,3 +144,4 @@ int main()
 	getchar();
 	return 0;
 }
+
