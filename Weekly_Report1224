@@ -1,0 +1,9 @@
+本周完成：
+1.成功安装配置Cplex;
+2.了解Cplex中一些基本变量的含义和用法，根据网上的教程和Cplex自带sample完成简单的例子；
+3.预习第七章的内容Decomposition principle；
+4.本周忙于学校计算机网络课和货币金融学的课程报告。
+下周计划：
+1.采用随机取点方式减少气象预测测试集点数；
+2.学习Cplex自带的其他sample；
+2.利用Cplex试写Column Generation的sample。
