@@ -350,7 +350,7 @@ void set_varB(vector<row>Binverse, vector<double>b)
 }
 
 
-int solve(int &d,vector<var*> &varB,vector<double>c, vector<row>A, vector<double>b, vector<var*>& varN, vector<var*> vars)
+bool  solve(int &d,vector<var*> &varB,vector<double>c, vector<row>A, vector<double>b, vector<var*>& varN, vector<var*> vars)
 {
 	bool a = true;
 	while (a)
