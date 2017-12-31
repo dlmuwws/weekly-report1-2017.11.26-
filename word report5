@@ -7,4 +7,4 @@
 下周计划：
 1.将代码改好，完善
 2.学会怎么用cplex解线性规划的例子
-3.试着用c++编写一下column里的cutting stock 问题。
+3.试着用c++编写一下column generation里的cutting stock 问题。
