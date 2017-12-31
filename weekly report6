@@ -1,0 +1,9 @@
+本周汇报
+1.改好上周的代码小bug
+2.看了一些关于c++类模板和函数模板的用法，以及tuple的用法，并用tuple生成比赛的训练数据
+3.安装好cplex，参照IBM官网的教程学习cplex。目前练习了Interactive Optimizer求解线性规划问题的操作，以及阅读了
+  针对 C++ 的 Concert Technology部分，求解了一个简单的线性规划问题，看了文件读取输出代码sample并进行
+  了操作，阅读了cplex自带的cutstock sample, 自己也求解了一遍（代码的小bug还未改过来）。
+4.看书的第7章，预习了一部分第8章内容
+5.了解了A star 算法基本原理，下周代码实现一下
+6.改代码的bug时间较长，以后争取慢慢少写bug。。
