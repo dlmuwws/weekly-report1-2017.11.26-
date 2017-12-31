@@ -1,0 +1,8 @@
+本周完成：
+1.生成固定格式的比赛数据，并且随机筛选出小规模的训练集。
+2.读懂cplex自带的column generation的sample,并根据sample成功跑了一遍column generation。
+3.把上课讲的dantzig-wolfe decomposition复习了一遍。
+下周完成：
+1.预习新一章节的内容。
+2.查阅资料发现列生成常与分支定界法结合，学习分支定界法的代码逻辑并完成简单sample。
+3.clpex有些参数以及跑出结果的一些参数还没有看懂，还需要上官网上看一些学习资料。
