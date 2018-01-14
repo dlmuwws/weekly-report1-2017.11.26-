@@ -22,23 +22,27 @@ vector<WareHouse>* InputWH() {
 	char *tmp;
 	int x_temp = 0;
 	int y_temp = 0;
-	int dem = 0;
+	//int dem = 0;
 	int n = 0;
-	bool ne(false);
+	//bool ne(false);
 	double sf = 0.0;
 	double mf = 0.0;
 	double lof = 0.0;
 
+	int i(1);//计数
+
 	while (getline(infile1, buf)) {
 
 		string bufCopy = buf;
+		WareHouse cur{ x_temp,y_temp };
+
 		token = strtok_s((char *)bufCopy.c_str(), ",", &tmp);
 		x_temp = atoi(token);
 
 		token = strtok_s(NULL, ",", &tmp);
 		y_temp = atoi(token);
 
-		token = strtok_s(NULL, ",", &tmp);
+		/*token = strtok_s(NULL, ",", &tmp);
 		dem = atoi(token);
 
 		token = strtok_s(NULL, ",", &tmp);
@@ -46,7 +50,10 @@ vector<WareHouse>* InputWH() {
 		if (n == 1)
 			ne = true;
 		else
-			ne = false;
+			ne = false;*/
+
+		if (i >= 23 && i <= 48)
+			cur.setnew(1);
 
 
 		token = strtok_s(NULL, ",", &tmp);
@@ -60,18 +67,19 @@ vector<WareHouse>* InputWH() {
 
 
 
-		WareHouse cur{ x_temp,y_temp };
-		cur.setD(dem);
+		//cur.setD(dem);
 		cur.setMf(mf);
 		cur.setSf(sf);
 		cur.setlocalf(lof);
-		cur.setnew(ne);
+		//cur.setnew(ne);
 		allwh->push_back(cur);
 
-		infile1.close();
+		i++;
 
 	}
+	infile1.close();
 	return allwh;
+
 }
 
 vector<Factory>* InputFac() {
@@ -88,33 +96,40 @@ vector<Factory>* InputFac() {
 	char *tmp;
 	int x_temp = 0;
 	int y_temp = 0;
-	int pro = 0, dem = 0;
+	int pro = 0; //dem = 0;
 	int n = 0;
-	bool ne(false);
+	//bool ne(false);
 	double sf = 0.0, prof = 0.0;
 	double mf = 0.0, slim = 0.0;
+
+	int i(1);//计数
 
 	while (getline(infile1, buf)) {
 
 		string bufCopy = buf;
+		Factory cur{ x_temp,y_temp };
+
 		token = strtok_s((char *)bufCopy.c_str(), ",", &tmp);
 		x_temp = atoi(token);
 
 		token = strtok_s(NULL, ",", &tmp);
 		y_temp = atoi(token);
 
-		token = strtok_s(NULL, ",", &tmp);
-		dem = atoi(token);
+		/*token = strtok_s(NULL, ",", &tmp);
+		dem = atoi(token);*/
+		
 
 		token = strtok_s(NULL, ",", &tmp);
 		pro = atoi(token);
 
-		token = strtok_s(NULL, ",", &tmp);
+		/*token = strtok_s(NULL, ",", &tmp);
 		n = atoi(token);
 		if (n == 1)
 			ne = true;
 		else
-			ne = false;
+			ne = false;*/
+		if (i >= 4 && i <= 6)
+			cur.setnew(1);
 
 		token = strtok_s(NULL, ",", &tmp);
 		prof = atof(token);
@@ -129,20 +144,18 @@ vector<Factory>* InputFac() {
 		slim = atof(token);
 
 
-
-		Factory cur{ x_temp,y_temp };
 		cur.setP(pro);
-		cur.setD(dem);
+		//cur.setD(dem);
 		cur.setPf(prof);
 		cur.setMf(mf);
 		cur.setSf(sf);
-		cur.setnew(ne);
+		//cur.setnew(ne);
 		cur.setlim(slim);
 		allfc->push_back(cur);
 
-		infile1.close();
-
+		i++;
 	}
+	infile1.close();
 	return allfc;
 }
 
@@ -180,9 +193,9 @@ vector<Customer>* InputCus() {
 		cur.setD(dem);
 		allcus->push_back(cur);
 
-		infile1.close();
 
 	}
+	infile1.close();
 	return allcus;
 }
 
