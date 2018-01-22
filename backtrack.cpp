@@ -186,13 +186,13 @@ double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)             /
 			cout << "no branch, stop search" << endl;
 			break;
 		}
-		cout << "回溯到:" << i << endl;
+		cout << "回溯到:" << i <<"层"<< endl;
 		cw -= w[i + 1];  cp -= p[i + 1];
 		m[i]++;        //如果上一层无可分支的子节点，m[i]++超出范围，则继续i--
 	}
 	for (int j = 1; j <= n; j++)
 	{
-		 best_x[j]=bestx[q[n - j].getindex()];    
+		 best_x[q[j-1].getindex()]=bestx[j];
 	}
 	return  lp;
 }
@@ -274,3 +274,4 @@ bool constraint(int m, int i,double lp_,double*w,double*p,double c_w,double c_p,
 		}
 	}
 }
+
