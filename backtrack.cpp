@@ -130,15 +130,12 @@ double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)             /
 			{
 				  s[m[i]] = 1;       //根节点的该子节点已访问过
 			}
-
-			cout << "s" << s[1] << endl;
-
-
+			/*
 			cout <<"m[i] :"<<m[i] << endl;
 			cout <<"i :"<< i << endl;
 			cout << "cw :"<<cw << endl;
 			cout << "cp :"<<cp << endl;
-
+			*/
 			if (constraint(m[i],i,lp,w,p,cw,cp,c_))         // 如果满足约束条件
 			{
 				cout << "add an item!" << endl;           
@@ -184,6 +181,11 @@ double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)             /
 		if (find)
 			break;
 		i--;               //回溯到上层
+		if (i < 0)
+		{
+			cout << "no branch, stop search" << endl;
+			break;
+		}
 		cout << "回溯到:" << i << endl;
 		cw -= w[i + 1];  cp -= p[i + 1];
 		m[i]++;        //如果上一层无可分支的子节点，m[i]++超出范围，则继续i--
@@ -236,16 +238,15 @@ bool constraint(int m, int i,double lp_,double*w,double*p,double c_w,double c_p,
 {
 	if (m==0)  //左孩子
 	{
-		//test p_bound
-		cout << "up_bound:"<<p_bound(i) << endl;
+		//cout << "up_bound:"<<p_bound(i) << endl;
 		if (c_w+w[i+1] < c_&&p_bound(i) >= lp_)
 		{
-			cout << "left child is feasible" << endl;
+			//cout << "left child is feasible" << endl;
 			cw += w[i+1];
-			cout << "cw" << cw << endl;           //--------test
+			//cout << "cw" << cw << endl;        
 			cp += p[i + 1];
 			lp = c_p+ p[i+1];
-			cout << "lp" << lp << endl;           //--------test
+			//cout << "lp" << lp << endl;           
 			dead = false;
 			return true;
 		}
@@ -258,9 +259,11 @@ bool constraint(int m, int i,double lp_,double*w,double*p,double c_w,double c_p,
 		if (p_bound(i + 1) >= lp_)
 		{
 			lp = p_bound(i + 1);
-			cout << "p_bound[i+1]" << p_bound(i + 1) << endl;
+			/*
+			cout << "p_bound:" << p_bound(i + 1) << endl;
 			cout << "new lp" << lp << endl;
 			cout << "right child is feasible" << endl;
+			*/
 			dead = false;
 			return true;
 		}
