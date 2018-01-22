@@ -5,19 +5,17 @@ using namespace std;
 
 
 bool soln(int*s, int i, int d, bool dead);   //判断是否停止搜索最优解
-bool constraint(int m, int i, double lp, double*w, double*p, double c_w, double c_p, double c_);
-double p_bound(int level);
-bool cmp(density a, density b);
-double knapsack(double *ww, double *pp, int n_, double c_, int*bestx);
+bool constraint(int m, int i, double lp, double*w, double*p, double c_w, double c_p, double c_);       //分支规则
+double p_bound(int level);       //计算目标函数上界
+bool cmp(density a, density b);       //比较密度（价值/重量）
+double knapsack(double *ww, double *pp, int n_, double c_, int*bestx);    //回溯法解背包问题
 
 //全局变量
-double c;
-int n;
-double *w;  
-double *p;
-double cw;
-double cp;
-int *best_x;
+double c;    //背包容量
+int n;       //商品个数
+double *w;  //重量
+double *p;  //价值
+int *best_x;   //解向量
 
 int main()
 {
@@ -39,15 +37,27 @@ int main()
 	return 0;
 }
 
+
+
+//public variables 的初始化
+bool dead = false;
+double lp = 0; //下界
+double cw = 0.0;  
+double cp = 0.0;
+static int m[3]{ 0,0,0 };       //每一层节点的取值位置，在本例中区分左右孩子节点
+int a[3][2] = { { 1,0 },{ 1,0 },{ 1,0 } };  //x每一步的取值集合, 在这里x每次的取值集合是1，0          //不同问题不一样，TSP问题的取值集合是 1,2,3,4...  
+int k[3]{ 2,2,2 };     //在这里每个节点有两个分支(兄弟节点)   .TSP问题每一层的K不全是2，如第0层是3，第1层是2.。。。
+int d[3]{ 0,0,0 };      //记录每一层搜索过的节点数
+int s[2]{ 0,0 };     //根节点的分支，访问过后设为1
+
+
+
 bool cmp(density a, density b)
 {
 	return a.des > b.des;
 }
 
-bool dead = false;
-
-
-double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)
+double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)             //回溯法求解背包
 {
 	n = n_; c = c_;
 	double best_v=0;
@@ -97,27 +107,16 @@ double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)
 	cout << endl;
 
 
-    //初始化
-	cw = 0.0;
-	cp = 0.0;
-	double lp =0; //下界
-	int i = 0;
-    static int m[3]{ 0,0,0 };  //每一层节点的取值位置，在本例中区分左右孩子节点
-	int a[3][2] = { {1,0},{1,0},{1,0} };  //x每一步的取值集合, 在这里x每次的取值集合是0，1
 
-	int k[3]{2,2,2};     //在这里每个节点有两个分支(兄弟节点)
-	int d[3]{0,0,0};      //记录每一层搜索过的节点数
-	int s[2]{0,0};
-	bool find = false;  //是否找到最优解
-	
-	
 	//开始
+	bool find = false;  //是否找到最优解
+	int i = 0;
 	while (i>=0)
 	{
 		if (i==0)
 		{
 			cw = cp = 0;
-		}
+		}                  
 		for (int g=0;g<n;g++)
 		{
 			if (i==g)
@@ -142,10 +141,9 @@ double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)
 
 			if (constraint(m[i],i,lp,w,p,cw,cp,c_))         // 如果满足约束条件
 			{
-				cout << "add an item!" << endl;
+				cout << "add an item!" << endl;           
 				bestx[i+1] = a[i][m[i]];
-
-				cout <<"x[i+1]:"<< bestx[i + 1] << endl;               //test
+				cout <<"x"<<i+1<<"="<< bestx[i + 1] << endl;               
 
 				if (soln(s,i,d[i],dead))               
 				{
@@ -156,18 +154,23 @@ double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)
 				else        //继续深度搜索
 				{
 					cout << "continue" << endl;
-					if (i < n - 1)
+					if (i < n - 1)           //没有到达最底层
 					{
 						i++;
-						m[i] = 0;          //重置m[i];
+						m[i] = 0;               //重置m[i];
 						continue;
 					}
-					else
-						cout << "up" << endl;
-						break;
+					else                            //已经达到最底层
+						if (m[i] + 1 < k[i])     //如果是左节点则接下来回溯到它的父亲节点看右节点， 否则跳出循环，回溯到上一层的父亲节点
+						{
+							m[i]++; 
+							cw -= w[i + 1]; cp -= p[i + 1];       //回溯到父亲节点，比较同一层的其他兄弟节点    //但cp,cw应该减去刚刚加入的这一层的孩子节点的w,p
+					        continue;                                    //一旦回溯就要注意调整cp cw
+						}                  
+					    break;
 				}
 			}
-			else        //不满足，看兄弟节点
+			else        //不满足约束，回溯到父亲节点看兄弟节点
 			{
 				if (soln(s, i, d[i],dead))
 				{
@@ -175,22 +178,21 @@ double knapsack(double *ww,double *pp, int n_,double c_,int*bestx)
 					cout << "find!!!" << endl;
 					break;
 				}
-				m[i]++;
+				m[i]++;                   //如果兄弟节点都访问完了，跳出循环，回溯到上层
 			}
 		}
-
 		if (find)
 			break;
-		i--;            //回溯
+		i--;               //回溯到上层
 		cout << "回溯到:" << i << endl;
 		cw -= w[i + 1];  cp -= p[i + 1];
-		m[i]++;   //如果上一层无可分支的子节点，m[i]++超出范围，则继续i--
+		m[i]++;        //如果上一层无可分支的子节点，m[i]++超出范围，则继续i--
 	}
 	for (int j = 1; j <= n; j++)
 	{
-		 best_x[j]=bestx[q[n - j].getindex()];
+		 best_x[j]=bestx[q[n - j].getindex()];    
 	}
-	return  cp;
+	return  lp;
 }
 
 double p_bound(int level)            //计算upperprofit，一般是current objvalue + rest possible max objvalve
@@ -230,43 +232,41 @@ bool soln(int*s,int i,int d,bool dead)   //判断是否停止搜索最优解
 	}
 }
 
-bool constraint(int m, int i,double lp,double*w,double*p,double c_w,double c_p,double c_)  
+bool constraint(int m, int i,double lp_,double*w,double*p,double c_w,double c_p,double c_)  
 {
 	if (m==0)  //左孩子
 	{
 		//test p_bound
-		cout << p_bound(i) << endl;
-		if (c_w+w[i+1] < c_&&p_bound(i) >= lp)
+		cout << "up_bound:"<<p_bound(i) << endl;
+		if (c_w+w[i+1] < c_&&p_bound(i) >= lp_)
 		{
-			cout << "ok1" << endl;
+			cout << "left child is feasible" << endl;
 			cw += w[i+1];
-
 			cout << "cw" << cw << endl;           //--------test
-
 			cp += p[i + 1];
 			lp = c_p+ p[i+1];
-
 			cout << "lp" << lp << endl;           //--------test
-
 			dead = false;
 			return true;
 		}
 		else
-			dead = true;
+			dead = true;     //unfeasible, set as dead node
 			return false;
 	}
 	else      //右孩子
 	{
-		if (p_bound(i + 1) >= lp)
+		if (p_bound(i + 1) >= lp_)
 		{
-			cout << "ok2" << endl;
-			//cw -= w[i + 1]; cp -= p[i + 1];
+			lp = p_bound(i + 1);
+			cout << "p_bound[i+1]" << p_bound(i + 1) << endl;
+			cout << "new lp" << lp << endl;
+			cout << "right child is feasible" << endl;
 			dead = false;
 			return true;
 		}
 		else
 		{
-			dead = true;
+			dead = true;     //unfeasible, set as dead node
 			return false;
 		}
 	}
