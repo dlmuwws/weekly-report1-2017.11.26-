@@ -1,5 +1,5 @@
 本周 汇报：
 1.继续看《算法设计与分析》，改好上周的小bug后，看了dynamic paogramming算法一章，自己练习了两个小例子，体会总结了动态规划解题思路，对于不同问题如何设计
-转化dp表； 看了network maxflow一部分，在之前写的BFS求增广链的基础上，尝试了另一种增广链方法(测试结果有小bug)。
+转化dp表； 看了network maxflow一部分，在之前写的BFS求增广链的基础上，尝试了另一种增广链方法(测试结果目前还有小bug)。
 2.看了一部分论文（airline crew scheduling:a new formulation and decomposition algorithm）.
  
