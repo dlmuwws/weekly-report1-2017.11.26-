@@ -75,7 +75,7 @@ using namespace std;
 	// cout<<"count:"<<counts<<endl;
 	 path[counts] = v;
 	 double temp=0;
-	 int ti= 0;
+	 int ti= 0;            //计数：这个点有几个符合条件的邻接点
 	 for (int i=0;i<n;i++)
 	 {
 		 if ((r[v][i]>0)&&(!loop(i,path,counts)))
