@@ -25,7 +25,14 @@ using namespace std;
  int main()
  {
 	 s = 0; t = 6;
-	 c[0][1] = 8; c[0][2] = 5; c[1][3] = 2; c[1][4] = 6; c[2][3] = 5;  c[2][5] = 2; c[3][6] = 5; c[4][6] = 6; c[5][6] = 2;
+	 for (int i = 0; i < n; i++)
+	 {
+		 for (int j = 0; j<n; j++)
+		 {
+			 c[i][j] = 0;
+		 }
+	 }
+	 c[0][1] = 8; c[0][2] =5; c[1][3] =2; c[1][4]= 6; c[2][3] =5;  c[2][5] = 2; c[3][6] =5; c[4][6] = 6; c[5][6] =2;
 	double max_networkflow=maxflow(c, f, s, t, n);
 	cout << "max_networkflow=" << max_networkflow << endl;
 	for (int i=0;i<n;i++)
@@ -65,15 +72,18 @@ using namespace std;
 		 }
 		 cout << endl;
 	 }
-	 cout<<"count:"<<counts<<endl;
+	// cout<<"count:"<<counts<<endl;
 	 path[counts] = v;
 	 double temp=0;
+	 int ti= 0;
 	 for (int i=0;i<n;i++)
 	 {
 		 if ((r[v][i]>0)&&(!loop(i,path,counts)))
 		 {
-			 cout << "i: " << i << endl;
-			 cout << "count:" << counts << endl;
+			 counts = counts - ti;
+			 ti++;
+			 //cout << "i: " << i << endl;
+			// cout << "count:" << counts << endl;
 			 cap[counts] = r[v][i];
 			 counts++;
 			 if (i != t)
@@ -99,15 +109,14 @@ using namespace std;
 				 }
 				 cout << "temp:" << temp << endl;
 				 cout << "flow:" << flow << endl;
-				 cout << "count:" << counts << endl;
+				 //cout << "count:" << counts << endl;
 				 if (temp > flow)   //找到一条具有更大瓶颈流量的增广链，代替原来的
 				 {
-					 cout << "ok" << endl;
-					 for (int j = 0; j < counts; j++)
+					 for (int j = 0; j <= counts; j++)
 					 {
 						 path_[j] = path[j];
 					 }
-					 count_ = counts + 1;
+					 count_ = counts;
 					 flow = temp;
 				 }
 			 }
@@ -127,21 +136,27 @@ using namespace std;
 			 r[i][j] = c[i][j];
 		 }
 	 }
-	// r[0][1] =r[1][0]= 8; r[0][2] =r[2][0]= 5; r[1][3] =r[3][1]= 2; r[1][4] =r[4][1]= 6; r[2][3] =r[3][2]= 5;  r[2][5] =r[5][2] =2; r[3][6] = r[6][3]=5; r[4][6] =r[6][4]= 6; r[5][6] =r[6][5] =2;
+	
 	 while (find)   
 	 {
 		 c_count = 0; flow = 0; find = false;
 		 dfs(s,t,r,n,path,path_,c_count,count_,cap,flow,find);
-		 //cout << "count_:" <<count_<< endl;
+		// cout << "c_count:" <<c_count<< endl;
 		 if (find)
 		 {
 			 cout << "flow:" <<flow<< endl;
 			 max_flow += flow;
+			 cout << "adjust_path_:" << endl;
+			 for (int k = 0; k <= count_; k++)
+			 {
+				 cout << "path_:" << path_[k] << " ";
+			 }
+			 cout << endl;
 			 for (int k = 0; k < count_;k++)          //求此时的f,调整r
 			 {
 				 f[path_[k]][path_[k + 1]] += flow;
 				 r[path_[k]][path_[k + 1]] -= flow;
-				 r[path_[k + 1]][path_[k]] += flow;
+				 r[path_[k + 1]][path_[k]] = f[path_[k]][path_[k + 1]];
 			 }
 		 }
 	 }
