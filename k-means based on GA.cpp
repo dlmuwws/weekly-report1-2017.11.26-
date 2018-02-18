@@ -1,5 +1,4 @@
 io.h
-
 #pragma once
 #include<iostream>
 #include<vector>
@@ -8,7 +7,7 @@ using namespace std;
 class stock
 {
 public:
-	double indicator1;   //10个指标
+	double indicator1;   //13个指标
 	double indicator2;
 	double indicator3;
 	double indicator4;
@@ -18,18 +17,19 @@ public:
 	double indicator8;
 	double indicator9;
 	double indicator10;
-	double return_rate;   //股票回报率
-	stock(double ind1, double ind2, double ind3, double ind4, double ind5, double ind6, double ind7, double ind8, double ind9, double ind10, double r_r) :
-	indicator1(ind1), indicator2(ind2), indicator3(ind3), indicator4(ind4), indicator5(ind5), indicator6(ind6), indicator7(ind7), indicator8(ind8), indicator9(ind9), indicator10(ind10), return_rate(r_r)
+	double indicator11;
+	double indicator12;
+	double indicator13;
+	stock(double ind1, double ind2, double ind3, double ind4, double ind5, double ind6, double ind7, double ind8, double ind9, double ind10, double ind11, double ind12, double ind13) :
+	indicator1(ind1), indicator2(ind2), indicator3(ind3), indicator4(ind4), indicator5(ind5), indicator6(ind6), indicator7(ind7), indicator8(ind8), indicator9(ind9), indicator10(ind10), indicator11(ind11), indicator12(ind12), indicator13(ind13)
 	{
 	}
 	void print() 
 	{
-		cout <<indicator1 << "  " <<indicator2 << "  " << indicator3 << "  " << indicator4 << "  " << indicator5 << "  " << indicator6 << "  " << indicator7 << "  " << indicator8 << "  " <<indicator9 << "  " <<indicator10 << "  " << return_rate << endl;
+		cout <<indicator1 << "  " <<indicator2 << "  " << indicator3 << "  " << indicator4 << "  " << indicator5 << "  " << indicator6 << "  " << indicator7 << "  " << indicator8 << "  " <<indicator9 << "  " <<indicator10 << "  " << indicator11 << "  " <<indicator12 << "  " <<indicator13  << endl;
 	}
 	bool operator=(const stock *stock_)
 	{
-		cout << "test" << endl;
 		int k = 0;
 		if (this->indicator1 == stock_->indicator1) { k++; }
 		if (this->indicator2 == stock_->indicator2) { k++; }
@@ -41,14 +41,15 @@ public:
 		if (this->indicator8 == stock_->indicator8) { k++; }
 		if (this->indicator9 == stock_->indicator9) { k++; }
 		if (this->indicator10 == stock_->indicator10) { k++; }
-		if (k == 10)
+		if (this->indicator11 == stock_->indicator11) { k++; }
+		if (this->indicator12 == stock_->indicator12) { k++; }
+		if (this->indicator13 == stock_->indicator13) { k++; }
+		if (k == 13)
 		{
-			cout << 1<<endl;
 			return true;
 		}
 		else
 		{
-			cout << 0<<endl;
 			return false;
 		}
 	}
@@ -58,19 +59,12 @@ class io
 {
 public:
 	io() {};
-	void input(vector<stock*>&sample_sets, vector<double>&indicators_1, vector<double>&indicators_2,
-		vector<double>&indicators_3,
-		vector<double>&indicators_4,
-		vector<double>&indicators_5,
-		vector<double>&indicators_6,
-		vector<double>&indicators_7,
-		vector<double>&indicators_8,
-		vector<double>&indicators_9,
-		vector<double>&indicators_10,
-		vector<double>&return_rates);
-	
-	
+	void input(vector<stock*>&sample_sets);
 };
+
+
+
+
 
 
 io.cpp
@@ -83,18 +77,7 @@ io.cpp
 using namespace std;
 #define PATH "C:/Users/wws199633/Desktop/"
 
-
-
-void io::input(vector<stock*>&sample_sets, vector<double>&indicators_1, vector<double>&indicators_2,
-vector<double>&indicators_3,
-vector<double>&indicators_4,
-vector<double>&indicators_5,
-vector<double>&indicators_6,
-vector<double>&indicators_7,
-vector<double>&indicators_8,
-vector<double>&indicators_9,
-vector<double>&indicators_10,
-vector<double>&return_rates)
+void io::input(vector<stock*>&sample_sets)
 {
 	string filename = PATH + string("data.csv");
 	ifstream infile;
@@ -113,7 +96,9 @@ vector<double>&return_rates)
 	double idc8;
 	double idc9;
 	double idc10;
-	double rr;
+	double idc11;
+	double idc12;
+	double idc13;
 	while (getline(infile,buff))
 	{
 		token = strtok_s((char*)buff.c_str(), ",", &temp);
@@ -137,37 +122,23 @@ vector<double>&return_rates)
 		token = strtok_s(NULL, ",", &temp);
 		idc10 = atof(token);
 		token = strtok_s(NULL, ",", &temp);
-		rr = atof(token);
-
-		indicators_1.push_back(idc1); indicators_2.push_back(idc2); indicators_3.push_back(idc3);
-		indicators_4.push_back(idc4); indicators_5.push_back(idc5); indicators_6.push_back(idc6); 
-		indicators_7.push_back(idc7); indicators_8.push_back(idc8); indicators_9.push_back(idc9);
-		indicators_10.push_back(idc10); return_rates.push_back(rr);
-		stock*stock_ = new stock(idc1,idc2,idc3, idc4, idc5, idc6, idc7, idc8, idc9,idc10,rr);
+		idc11 = atof(token);
+		token = strtok_s(NULL, ",", &temp);
+		idc12 = atof(token);
+		token = strtok_s(NULL, ",", &temp);
+		idc13 = atof(token);
+		stock*stock_ = new stock(idc1,idc2,idc3, idc4, idc5, idc6, idc7, idc8, idc9,idc10, idc11, idc12, idc13);
 		sample_sets.push_back(stock_);
 	}
-
 	infile.close();
-	sample_sets[7]->print();
+	cout << "test:" << endl;
+	sample_sets[1]->print();
 	cout << "finish read stock datas" << endl;
 }
 
-/*
-int main()
-{
-	cout << "start!!!" << endl;
-	io io;
-	io.input();
-	system("pause");
-	return 0;
-}
-
-//void io::output()
-//{
 
 
-//}
-*/
+
 
 
 
@@ -179,7 +150,6 @@ GA.h
 #include<vector>
 using namespace std;
 
-const int n = 3;   //聚类个数
 typedef vector<stock*>chros;   //染色体
 class GA
 {
@@ -189,39 +159,48 @@ private:
 	double mutate_p; //变异概率
 	int N; //种群个体数
 	vector<chros>population;   //种群
-	vector<double>fitness;
+	vector<double>fitness;   //适应度
 public:
 	GA();
 	void set_cp(double cp_) { cross_p = cp_; };
 	void set_mp(double mp_) { mutate_p = mp_; };
 	void set_N(int N_) { N = N_; };
 	void set_iter(int iter_) { iter = iter_; };
+	int getN() { return N; };
+	int get_iter() { return iter; };
+	void init() { fitness.push_back(0); };
 	vector<chros>get_population() { return population; };
 	vector<double>get_fitness() { return fitness; };
-	vector<chros> creat_population(GA &GA, int n_, vector<stock*>sample_sets);   //生成初始种群
+	double getcp() { return cross_p; };
+	double getmp() { return mutate_p; };
+	vector<chros> creat_population(GA &GA, int n_, vector<stock*>sample_sets);   
 	vector<double>cacu_fitness(GA &GA, vector<stock*>sample_sets);
 	vector<chros> choose(GA &GA);
 	vector<chros>cross(GA &GA,double p);
-	vector<chros>mutate(GA &GA,double q);
+	vector<chros>mutate(GA &GA,double q, vector<stock*>sample_sets);
 };
 
 
-GA.cpp
 
+
+
+
+
+GA.cpp
 #include "GA.h"
 #include"io.h"
 #include<iostream>
 #include <stdlib.h> 
 #include <time.h> 
+#include<math.h>
 #include<algorithm>
 #include<tuple>
 using namespace std;
 
 //定义常量
-#define max_iter //最大迭代次数
-#define MAX 9999
-#define julei  3
-#define yb 60
+#define   MAX   999999    
+#define julei  3    //聚类数
+#define yb 64     //样本数
 
 
 GA::GA()
@@ -232,7 +211,6 @@ vector<chros> GA::creat_population(GA &GA,int n_, vector<stock*>sample_sets)
 	cout << "start!!!" << endl;
 	//每次从样本集中随机选n_个，组成一个染色体，然后生成N个染色体的种群
 	int k = 0;
-	cout << "N" << GA.N << endl;
 	while (k<GA.N)
 	{
 		chros chros_;
@@ -240,14 +218,14 @@ vector<chros> GA::creat_population(GA &GA,int n_, vector<stock*>sample_sets)
 		srand((int)time(NULL)+k);
 		for (int i=0;i<n_;i++)
 		{
-			cout << (rand() % (b - a)) + a << endl;
+			cout << (rand() % (b - a)) + a << " ";
 			chros_.push_back(sample_sets[(rand() % (b - a)) + a]);
 		}
-		
+		cout << endl;
 		bool repeat = false;
 		for (int i = 0; i < k; i++)
 		{
-			if (chros_==GA.population[i])   //有重复
+			if (chros_==GA.population[i])   //有重复，重新生成
 			{
 				repeat = true;
 				break;
@@ -256,13 +234,11 @@ vector<chros> GA::creat_population(GA &GA,int n_, vector<stock*>sample_sets)
 		if (repeat) { continue; }
 		GA.population.push_back(chros_);
 		k++;
-		
 	}
 	return population;
  }
 
-
-double squa(double a, double b)  //计算每个指标的欧式距离
+double squa(double a, double b)  
 {
 	double t = (b - a)*(b - a);
 	return t;
@@ -297,14 +273,12 @@ double getMin_Value(vector<double>tempdist)  //返回距离最小值
 	return temp;
 }
 
-bool cmp(vector<stock*>&oldcenter_, vector<stock*>&newcenter_)
+bool cmp(vector<stock*>&oldcenter_, vector<stock*>&newcenter_)  //比较两次的聚类中心是否一样
 {
 	bool same = false;
 	int k = 0;
 	for (int i=0;i<julei;i++)
 	{
-		oldcenter_[i]->print();
-		newcenter_[i]->print();
 		if (oldcenter_[i]->operator=(newcenter_[i]))
 		{
 			k++;
@@ -319,26 +293,32 @@ vector<double>GA::cacu_fitness(GA &GA, vector<stock*>sample_sets)
 	cout << "start!!!" << endl;
 	for (int i=0;i<GA.N;i++)   //每个染色体计算一次适应度
 	{
-		cout << "i" << i << endl;
+		cout << "第" << i <<"个染色体适应度计算："<< endl;
 		vector<stock*>initcenter;     
 		vector<stock*>newcenter;       
 		vector<vector<double>>tempdists(yb, {0,0,0});       //存储各点到各聚类中心的距离的矩阵
 		vector<tuple<stock*, int,double>>cluster_soln;            //聚类结果矩阵
-		vector<vector<stock*>>cluster_soln2;     //每一类中有哪些股票
+		vector<vector<stock*>>cluster_soln2(julei);     //每一类中有哪些股票
+		vector<tuple<stock*, int, double>>cluster_soln_re;           
+		vector<vector<stock*>>cluster_soln2_re(julei);
 		for (int j=0;j<julei;j++)
 		{
-			initcenter.push_back(&stock(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+			initcenter.push_back(&stock(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0));
 		}
 		newcenter= GA.population[i];  //选定初始聚类中心
-		newcenter[1]->print();
-		initcenter[1]->print();
-		int s = 0;
-		while (!cmp(initcenter,newcenter))    //新旧聚类中心一样时停止聚类
+		int s = 1;
+		double oldobj = -1;
+		double newobj=MAX;
+		while (oldobj==-1||abs(newobj-oldobj)>=oldobj*0.01)    //停止聚类条件
 		{
+			vector<tuple<stock*, int, double>>cluster_soln;            //聚类结果矩阵
+			vector<vector<stock*>>cluster_soln2(julei);     //每一类中有哪些股票
+			cout << "oldobj" << oldobj << endl;
+			cout << "newobj" << newobj << endl;
 			s++;
 			initcenter = newcenter;
+			oldobj = newobj;
 			//对每个点计算到各聚类中心的距离,欧式距离,并确定离哪个聚类中心的距离最近
-		
 			for (int j=0;j<yb;j++)
 			{
 				for (int k= 0; k<julei; k++)
@@ -346,37 +326,28 @@ vector<double>GA::cacu_fitness(GA &GA, vector<stock*>sample_sets)
 					tempdists[j][k] = CalcDist(sample_sets[j], initcenter[k]);
 				}
 			}
-
 			//为每个点确定属于哪一类
 			for (int j = 0; j<yb; j++)
 			{
 				cluster_soln.push_back(make_tuple(sample_sets[j],getMin_index(tempdists[j]), getMin_Value(tempdists[j])));
 			}
-			cout << "ok" << endl;
 			//确定每一类中有哪些
 			for (int k = 0; k<julei; k++)
 			{
 				for (int j = 0; j<yb; j++)
 				{
-					int g = 0;
 					if (get<1>(cluster_soln[j])== k)
 					{
-						
-						get<0>(cluster_soln[j])->print();
-						cluster_soln2[k][g]=get<0>(cluster_soln[j]);
-						g++;
-						
+						cluster_soln2[k].push_back(get<0>(cluster_soln[j])); 
 					}
 				}
-				cout << endl;
 			}
-			
 			//更新各类的聚类中心,计算平均值
 			for (int k=0;k<newcenter.size();k++)
 			{
 				double sum_inc1=0; double sum_inc2=0; double sum_inc3=0; double sum_inc4=0; double sum_inc5=0;
 				double sum_inc6=0; double sum_inc7=0; double sum_inc8=0; double sum_inc9=0; double sum_inc10=0;
-				double sum_rr=0;
+				double sum_inc11 = 0; double sum_inc12 = 0; double sum_inc13= 0;
 				for (int j=0;j<cluster_soln2[k].size();j++)
 				{
 					sum_inc1 += cluster_soln2[k][j]->indicator1;
@@ -389,39 +360,48 @@ vector<double>GA::cacu_fitness(GA &GA, vector<stock*>sample_sets)
 					sum_inc8 += cluster_soln2[k][j]->indicator8;
 					sum_inc9 += cluster_soln2[k][j]->indicator9;
 					sum_inc10 += cluster_soln2[k][j]->indicator10;
-					sum_rr += cluster_soln2[k][j]->return_rate;
+					sum_inc11 += cluster_soln2[k][j]->indicator11;
+					sum_inc12 += cluster_soln2[k][j]->indicator12;
+					sum_inc13 += cluster_soln2[k][j]->indicator13;
 				}
 				int size= cluster_soln2[k].size();
-				stock*stock_ = new stock(sum_inc1/size,sum_inc1 / size, sum_inc1 / size, sum_inc1 / size, sum_inc1 / size, sum_inc1 / size, sum_inc1 / size, sum_inc1 / size, sum_inc1 / size, sum_inc1 / size,sum_rr/size);
-			    newcenter.push_back(stock_);
+				if (size!=0)
+				{
+					stock *stock_ = new stock(sum_inc1 / size, sum_inc2 / size, sum_inc3 / size, sum_inc4 / size, sum_inc5 / size, sum_inc6 / size, sum_inc7 / size, sum_inc8 / size, sum_inc9 / size, sum_inc10 / size, sum_inc11 / size, sum_inc12 / size, sum_inc13 / size);
+					newcenter[k] = stock_;
+				}
 			}
-			//更新新的聚类中心
-			initcenter.clear();
-			newcenter.clear();
-			tempdists.clear();       //将上一次的聚类结果清除
+			newobj = 0;
+			for (int j = 0; j<cluster_soln.size(); j++)
+			{
+				newobj+= get<2>(cluster_soln[j]);
+			}
+			cluster_soln_re = cluster_soln; cluster_soln2_re = cluster_soln2;
 			cluster_soln.clear();            
 			cluster_soln2.clear();
+			vector<vector<stock*>>cluster_soln2_(julei);
 		}
-		cout << "s" << s << endl;    
+		cout << "聚类迭代" << s-1<<"次" << endl;    
 		//知道聚类结果后，计算该聚类结果下的适应度值
 		//适应度等于类间差异度/类内离散度。 适应度越大，则聚类效果越好
 		//类间差异：计算各聚类中心之间的距离之和
 		//类内离散：各点到其对应的聚类中心的距离之和
 		double sum1 = 0; //类间
 		double sum2= 0; //类内
-		for (int j=0;j<newcenter.size();j++)
+
+		for (int j=0;j<julei;j++)
 		{
-			for (int k=j+1;k<newcenter.size();k++)
+			for (int k=j+1;k<julei;k++)
 			{
-				sum1 += CalcDist(newcenter[j], newcenter[k]);
+				sum1 += CalcDist(initcenter[j], initcenter[k]);
 			}
 		}
-		for (int j=0;j<cluster_soln.size();j++)
+		for (int j=0;j<cluster_soln_re.size();j++)
 		{
-			sum2 += get<2>(cluster_soln[j]);
+			sum2 += get<2>(cluster_soln_re[j]);
 		}
 		double f = sum1 / sum2;
-		GA.fitness.push_back(f);
+		GA.fitness[i]=f;
 	}
 	return GA.get_fitness();
 }
@@ -429,25 +409,11 @@ vector<double>GA::cacu_fitness(GA &GA, vector<stock*>sample_sets)
 //选择(轮盘赌)下代种群
 vector<chros> GA::choose(GA &GA)
 {
-	cout << "start!!!" << endl;
 	vector<double>prob;
 	vector<double>sum_prob;  //每个个体有一个累计概率
 	int size_ = GA.get_population().size();
 	double sum=0; //所有个体适应度之和
-	//给原来种群排序
-	for (int i=0;i<size_;i++)
-	{
-		for (int j= i; j<size_;j++)
-		{
-			if (GA.get_fitness()[i]>GA.get_fitness()[j])
-			{
-				chros c; double d; 
-				c = GA.population[i];                           d = GA.get_fitness()[i];
-				GA.population[i] = GA.population[j];  GA.get_fitness()[i] = GA.get_fitness()[j];
-				GA.population[j] = c;                           GA.get_fitness()[j] = d;
-			}
-		}
-	}
+	
 	for (int i=0;i<size_;i++)
 	{
 		sum += GA.get_fitness()[i];
@@ -456,37 +422,49 @@ vector<chros> GA::choose(GA &GA)
 	{
 		prob.push_back(GA.get_fitness()[i] / sum);
 	}
+
 	sum_prob.push_back(prob[0]);
 	for (int i = 1; i<size_; i++)
 	{
 		sum_prob.push_back(sum_prob[i - 1] + prob[i]);
 	}
 
+	vector<chros>population_re; population_re = GA.population;
+
 	srand((unsigned)time(NULL));
 	for (int i = 0; i < GA.N;i++)          //生成子代种群
 	{
-		for (int j = 0; j< GA.N; j++)
+		double r = rand() % (N + 1) / (float)(N + 1);
+		if (r<sum_prob[0])
 		{
-			if (rand() % (N + 1) / (float)(N + 1)<sum_prob[j])
+			GA.population[i] = population_re[0];
+			break;
+		}
+		for (int j = 1; j< GA.N; j++)
+		{
+			if (sum_prob[j-1]<r&&r<sum_prob[j])
 			{
-				GA.population[i] = GA.population[j];
+				GA.population[i] = population_re[j];
 				break;
 			}
 		}
+		cout << endl;
 	}
+	prob.clear(); sum_prob.clear();
 	return GA.population;
 }
 
-////交叉(单点交叉)
+//交叉(单点交叉)
 vector<chros>GA::cross(GA &GA,double p)
 {
-	for (int i=1;i<GA.N;i=i+2)
-	{ 
+	srand((int)time(NULL));
+	for (int i = 0; i < GA.N; i = i + 2)
+	{
 		double pp = rand() % 1000 / (float)1000;   //0-1之间的随机数
 		if (pp < p)
 		{
 			int a = 0; int  b = julei - 1;
-			int  s = (rand() % (b - a)) + a;    //交叉点
+			int  s = (rand() % (b - a+1)) + a;    
 			for (int j = s; j < julei; j++)
 			{
 				stock*c;
@@ -499,40 +477,64 @@ vector<chros>GA::cross(GA &GA,double p)
 		{
 			continue;
 		}
+	}
+		return GA.population;
 }
 
+//变异
+vector<chros>GA::mutate(GA &GA, double q, vector<stock*>sample_sets)
+{
+	srand((int)time(NULL));
+	for (int i = 0; i < GA.N; i++)
+	{
+		double pp = rand() % 1000 / (float)1000;
+		if (pp < q)
+		{
+			int a = 0; int  b = julei - 1;
+			int  s = (rand() % (b - a+1)) + a;    //变异点
+			for (int j=0;j<yb;j++)
+			{
+				if (!sample_sets[j]->operator=(GA.population[i][s]))
+				{
+					GA.population[i][s] = sample_sets[j];
+					break;
+				}
+				else
+					continue;
+			}
+		}
+		else
+			continue;
+	}
+	return GA.population;
+}
+//主程序
 int main()
 {
 	io io;
 	vector<stock*>sample_sets; 
-	vector<double>indicators_1; 
-	vector<double>indicators_2;
-	vector<double>indicators_3;
-	vector<double>indicators_4;
-	vector<double>indicators_5;
-	vector<double>indicators_6;
-	vector<double>indicators_7;
-	vector<double>indicators_8;
-	vector<double>indicators_9;
-	vector<double>indicators_10;
-	vector<double>return_rates;
-    io.input(sample_sets, indicators_1, indicators_2, indicators_3, indicators_4, indicators_5, indicators_6, indicators_7, indicators_8, indicators_9, indicators_10, return_rates);
+    io.input(sample_sets);
 	//读取数据
 	    cout << "sample:" << sample_sets.size() << endl;
 		GA GA;
+		GA.set_iter(100);
 		GA.set_N(30);  //染色体数
-		int g = 3;  //聚类数
-		GA.creat_population(GA, g, sample_sets);
-		cout << GA.get_population().size()<<endl;
-		GA.get_population()[0][0]->print();
-		GA.cacu_fitness(GA,sample_sets);
-		GA.choose(GA);
-		GA.get_population()[0][0]->print();
+		GA.set_cp(0.6);
+		GA.set_mp(0.05);
+		GA.creat_population(GA, julei, sample_sets);
+		for (int j = 0; j < GA.getN(); j++) { GA.init(); };
+		int i = 0;
+		while (i<=GA.get_iter())  //迭代
+		{
+			cout << "第" << i << "次迭代:" << endl;
+			GA.cacu_fitness(GA, sample_sets);
+			for (int j = 0; j < GA.getN(); j++){ cout << GA.get_fitness()[j] << "  "; }
+			GA.choose(GA);
+			GA.cross(GA, GA.getcp());
+			GA.mutate(GA, GA.getmp(), sample_sets);
+			i++;
+		}
 		cout << "finish!!!" << endl;
 		system("pause");
 	return 0;
 }
-
-
-
-
