@@ -11,7 +11,7 @@ TreeNode::TreeNode(int val)
 	key = val;
 	left = right = p = NULL;
 }
-void inorder_tree_walk(TreeNode* x)
+void inorder_tree_walk(TreeNode* x)           
 {
 	if (x != NULL)
 	{
@@ -22,7 +22,7 @@ void inorder_tree_walk(TreeNode* x)
 	else
 		return;
 }
-void preorder_tree_walk(TreeNode*x)
+void preorder_tree_walk(TreeNode*x)        //前序遍历
 {
 	if (x)
 	{
@@ -32,7 +32,7 @@ void preorder_tree_walk(TreeNode*x)
 	}
 }
 
-TreeNode* tree_search(TreeNode* x, int k)
+TreeNode* tree_search(TreeNode* x, int k)   
 {
 	if (x == NULL || k == x->key)
 	return x;
@@ -40,7 +40,7 @@ if (k<x->key)
 	return tree_search(x->left,k);
 else return tree_search(x->right,k);
 }
-TreeNode* tree_minmum(TreeNode* x)
+TreeNode* tree_minmum(TreeNode* x)   
 {
 	while (x->left != NULL)
 		x = x->left;
@@ -52,7 +52,7 @@ TreeNode* tree_maxmum(TreeNode* x)
 		x = x->right;
 	return x;
 }
-TreeNode* tree_successor(TreeNode* x)
+TreeNode* tree_successor(TreeNode* x)   
 {
 	if (x->right)
 		return tree_minmum(x->right);
@@ -64,7 +64,7 @@ TreeNode* tree_successor(TreeNode* x)
 	}
 	return y;
 }
-TreeNode* tree_predecessor(TreeNode* x)//小于x.key的最大关键字的节点为前驱   
+TreeNode* tree_predecessor(TreeNode* x)   //小于x.key的最大关键字的节点为前驱   
 {
 	if (x->left)
 		return tree_maxmum(x->left);
@@ -77,7 +77,7 @@ TreeNode* tree_predecessor(TreeNode* x)//小于x.key的最大关键字的节点�
 	return y;
 }
 //c插入  
-void tree_insert(TreeNode* T, TreeNode* z) //T是现在的BST的树根  
+void tree_insert(TreeNode* T, TreeNode* z)    //T是现在的BST的树根  
 {
 	TreeNode * y = T; TreeNode *x = T;
 	while (x)
@@ -95,7 +95,7 @@ void tree_insert(TreeNode* T, TreeNode* z) //T是现在的BST的树根
 	else y->right = z;
 	//   return T;   
 }
-//删除节点  
+//删除树节点  
 void transplant(TreeNode* T, TreeNode* u, TreeNode* v)//用一颗子树代v替另一个子树u   
 {
 	if (u->p == NULL)
@@ -129,7 +129,7 @@ void tree_delete(TreeNode* T, TreeNode* z)
 	int main()
 	{
 	TreeNode* T = new TreeNode(15);
-	int a[10] = { 6,18,3,7,17,20,2,4,13,9 };
+	int a[10] = { 2,4,7,9,10,12,6,8,1,15 };
 	for (int i = 0; i<10; i++)
 	{
 		TreeNode* z = new TreeNode(a[i]);
@@ -140,7 +140,7 @@ void tree_delete(TreeNode* T, TreeNode* z)
 	TreeNode* min = tree_minmum(T);
 	TreeNode* max = tree_maxmum(T); cout << endl;
 	cout << "最大值：" << max->key << "  最小值：" << min->key << endl;
-	cout << "查找z=13的节点：";
+	cout << "查找z=9的节点：";
 	TreeNode* z = tree_search(T, 13); cout << z->key << endl;
 	TreeNode* prez = tree_predecessor(z);
 	TreeNode* sucz = tree_successor(z);
