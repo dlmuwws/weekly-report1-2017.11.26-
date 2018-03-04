@@ -2,6 +2,7 @@
 #include<iostream>
 using namespace std;
 #include"chainNode.h"
+#include "studentRecord.h"
 
 template <class T>
 class chain {
@@ -17,6 +18,9 @@ public:
 	void erase(int theIndex);
 	void insert(int thIndex, const T & theElement);
 	void output(ostream & out) const;
+	
+	void binSort(int range);
+	void binSort(int range, int(*value)(T& x));
 
 protected:
 	void checkIndex(int Index) const;
@@ -144,4 +148,85 @@ template<class T>
 ostream& operator<<(ostream &out, const chain<T> & x) {
 	x.output(out);
 	return out;
+}
+
+template<class T>
+void chain<T>::binSort(int range)
+{
+	chainNode<T> **bottom, **top;
+	bottom = new chainNode<T>*[range + 1];
+	top = new chainNode<T>*[range + 1];
+	for (int b = 0; b <= range; b++)
+		bottom[b] = NULL;
+
+	
+	for (; firstNode != NULL; firstNode = firstNode->next)
+	{
+		int theBin = firstNode->element; 
+		if (bottom[theBin] == NULL) 
+			bottom[theBin] = top[theBin] = firstNode;
+		else
+		{
+			top[theBin]->next = firstNode;
+			top[theBin] = firstNode;
+		}
+	}
+
+	
+	chainNode<T> *y = NULL;
+	for (int theBin = 0; theBin <= range; theBin++)
+		if (bottom[theBin] != NULL)
+		{
+			if (y == NULL) 
+				firstNode = bottom[theBin];
+			else 
+				y->next = bottom[theBin];
+			y = top[theBin];
+		}
+	if (y != NULL)
+		y->next = NULL;
+
+	delete[] bottom;
+	delete[] top;
+}
+
+template<class T>
+void chain<T>::binSort(int range, int(*value)(T& x))
+{
+	chainNode<T> **bottom, **top;
+	bottom = new chainNode<T>*[range + 1];
+	top = new chainNode<T>*[range + 1];
+	for (int b = 0; b <= range; b++)
+		bottom[b] = NULL;
+
+	
+	for ( ; firstNode != NULL; firstNode = firstNode->next)
+	{
+		int theBin = value(firstNode->element);
+		
+		if (bottom[theBin] == NULL) 
+			bottom[theBin] = top[theBin] = firstNode;
+		else
+		{
+			top[theBin]->next = firstNode;
+			top[theBin] = firstNode;
+		}
+	}
+
+	
+	chainNode<T> *y = NULL;
+	 for (int theBin = 0; theBin <= range; theBin++)
+		if (bottom[theBin] != NULL)
+		{
+			if (y == NULL) 
+				firstNode = bottom[theBin];
+			else 
+				y->next = bottom[theBin];
+			y = top[theBin];
+		}
+	if (y != NULL)
+		y->next = NULL;
+
+	delete[] bottom;
+	delete[] top;
 }
