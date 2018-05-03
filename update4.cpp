@@ -619,6 +619,8 @@ vector<vector<vector<string_>>>find_oneday_string(vector<leg*>&leg_list_)
 		{
 			airp_strings_vec[k - 1].clear();
 		}
+
+		cout << "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" << endl;
 	}
 	//cout << day_strings_vec[6].size()<< endl;
 
@@ -1392,6 +1394,7 @@ vector<vector<event_node*>>weekly_nodes(int airport_num)
 
 
 
+
 //h文件
 
 #pragma once
@@ -1936,25 +1939,27 @@ bool flight_string::creat_string(vector<treenode*>&nodes, vector<flight_tree*>tr
 	return true;
 }
 
-bool flight_string::dfs(vector<vector<treenode*>>&strings_, vector<treenode*>&string_, treenode*current)   //返回从根节点到叶节点的一天的串
+bool flight_string::dfs(vector<vector<treenode*>>&strings_, vector<treenode*>&string_, treenode*current_)   //返回从根节点到叶节点的一天的串
 {
-	current->visited = 1;
-	if (current->child_legs.size() == 0)
+	current_->visited = 1;
+	if (current_->child_legs.size() == 0)
 	{
 		strings_.push_back(string_);
+		cout << "碰到头停止" << strings_.size() << endl;
 		cout << "strings_size" << strings_.back().size() << endl;
 		cout << "stop search" << endl;
+		string_.pop_back();
 		return false;
 	}
-	for (int i = 0; i<current->child_legs.size(); i++)
+	for (int i = 0; i<current_->child_legs.size(); i++)
 	{
-		if (current->child_legs[i]->visited == 0)
+		if (current_->child_legs[i]->visited == 0)
 		{
-			treenode*next_node = current->child_legs[i];
+			treenode*next_node = current_->child_legs[i];
 			string_.push_back(next_node);
-			cout << "string_size" << string_.size() << endl;
+			cout << "string_" << string_.size() << endl;
 			dfs(strings_, string_, next_node);
-			cout << "string_size" << string_.size() << endl;
+			cout << "string_" << string_.size() << endl;
 			cout << "strings_size" << strings_.size() << endl;
 		}
 	}
@@ -2479,5 +2484,4 @@ for (int i = 1; i < num; i++)
  return result_;
 
 }
-
 
