@@ -5,6 +5,7 @@
 #include<fstream>
 #include<vector>
 #include<tuple>
+#include<queue>
 #include<stdlib.h>
 #include<stdio.h>
 #include"class_set.h"
@@ -59,7 +60,7 @@ int main()
 {
 	//创建点
 	cout << "creat nodes:" << endl;
-	vector<vector<event_node*>>d_nodes = daily_nodes(airports);
+	vector<vector<event_node*>>d_nodes = daily_nodes(airports);  
 	vector<vector<event_node*>>w_nodes = weekly_nodes(airports);
 	//创建Ground arc
 	cout << "creat ground arcs:" << endl;
@@ -93,6 +94,11 @@ int main()
 		cout << weekly_leg_list[i]->index << "," << weekly_leg_list[i]->origin_airp << "," << weekly_leg_list[i]->departure_t << "," << weekly_leg_list[i]->dest_airp << "," << weekly_leg_list[i]->arrival_t << "," << weekly_leg_list[i]->date << "," << weekly_leg_list[i]->firm << "," << weekly_leg_list[i]->fixed_cost;
 		cout << endl;
 	}
+
+
+	cout << "过夜弧" << daily_leg_list[0]->get_y1_d(d_G)->end_->time <<","<< daily_leg_list[0]->get_y1_d(d_G)->start_->time << endl;
+	cout << "过夜弧" << weekly_leg_list[0]->get_y1_d(w_G)->end_->time << "," << weekly_leg_list[0]->get_y1_d(w_G)->start_->time << endl;
+
 
 	cout << "find one day strings:" << endl;
 	vector<vector<vector<string_>>>type_strings_ = find_oneday_string(weekly_leg_list);
@@ -322,11 +328,13 @@ int main()
 		vector<G_arc*>G_arc_list;
 		for (int i = 0; i < d_G.size(); i++)
 		{
-			for (int j = 0; j < d_G[i].size() - 1; j++)
+			for (int j = 0; j < d_G[i].size(); j++)
 			{
 				G_arc_list.push_back(d_G[i][j]);
 			}
 		}
+
+		
 
 		for (int i = 0; i<G_arc_list.size(); i++)
 		{
@@ -366,21 +374,21 @@ int main()
 
 		IloCplex MP_solve(INT_model);
 
-		//初始飞机数量
-		ground_vars[0].setLB(2);
-		ground_vars[0].setUB(2);
+		//在各过夜弧上设置初始飞机
+		ground_vars[5].setLB(2);
+		ground_vars[5].setUB(2);
 
-		ground_vars[6].setLB(2);
-		ground_vars[6].setUB(2);
+		ground_vars[11].setLB(2);
+		ground_vars[11].setUB(2);
 
-		ground_vars[12].setLB(2);
-		ground_vars[12].setUB(2);
+		ground_vars[16].setLB(2);
+		ground_vars[16].setUB(2);
 
-		ground_vars[18].setLB(2);
-		ground_vars[18].setUB(2);
+		ground_vars[21].setLB(2);
+		ground_vars[21].setUB(2);
 
-		ground_vars[24].setLB(2);
-		ground_vars[24].setUB(2);
+		ground_vars[26].setLB(2);
+		ground_vars[26].setUB(2);
 
 	//	MP_solve.solve();
 	//	MP_solve.exportModel("model3_.lp");
@@ -838,36 +846,19 @@ bool can_connect(string_ string_1, string_ string_2)
 
 pair<double*, int*>string_Dijkstra(int source, int**cost_matrix, int num)
 {
-
-
-	//cout << "test???????????????" <<source<< endl;
-	/*
-	for (int i=0;i<num;i++)
-	{
-	for (int j=0;j<num;j++)
-	{
-	cout << cost_matrix[i][j] << "   ";
-	}
-	cout << endl;
-	}
-	cout << "test//////////////////////////////////////////" << endl;
-	for (int i = 0; i < num; ++i)
-	{
-	cout<<cost_matrix[1][i];
-	}
-	*/
+	
 	cout << endl;
 	vector<bool> isvisited(num, false);                 //是否已经在S集合中  
 	double*dis_ = new double[num];
 	int*pre_ = new int[num];
-	/*初始化distance和prevVertex数组*/
+	/*初始化dis和pre数组*/
 	for (int i = 0; i < num; ++i)
 	{
 		dis_[i] = cost_matrix[source][i];
 		if (cost_matrix[source][i] < INF)
 			pre_[i] = source;
 		else
-			pre_[i] = -1;       //表示还不知道前一个节点是什么  
+			pre_[i] = -1;       
 	}
 	pre_[source] = -1;
 
@@ -875,22 +866,22 @@ pair<double*, int*>string_Dijkstra(int source, int**cost_matrix, int num)
 	isvisited[source] = true;          //开始节点放入S集合中  
 	int u = source;
 
-	for (int i = 1; i < num; i++)      //这里循环从1开始是因为开始节点已经存放在S中了，还有numOfVertex-1个节点要处理  
+	for (int i = 1; i < num; i++)      
 	{
-		/*选择distance最小的一个节点*/
+		
 		int nextVertex = u;
 		double tempDistance = INF;
 		for (int j = 0; j < num; ++j)
 		{
-			if ((isvisited[j] == false) && (dis_[j] < tempDistance))//寻找不在S集合中的distance最小的节点  
+			if ((isvisited[j] == false) && (dis_[j] < tempDistance))
 			{
 				nextVertex = j;
 				tempDistance = dis_[j];
 			}
 		}
-		isvisited[nextVertex] = true;//放入S集合中  
-		u = nextVertex;//下一次寻找的开始节点  
-					   /*更新distance*/
+		isvisited[nextVertex] = true;
+		u = nextVertex;
+					 
 		for (int j = 0; j < num; j++)
 		{
 			if (isvisited[j] == false && cost_matrix[u][j] < INF)
@@ -1134,7 +1125,6 @@ vector<oper_rotation*>three_day_find_sp(int*base, vector<vector<string_>>three_d
 		for (int j = M_num + size1 + size2 + size3; j<node_num; j++)
 		{
 			t++;
-
 			cout << "到达维修站" << base[j - M_num - size1 - size2 - size3] << ".";
 			for (int k = 0; k<s2_[sp_info.second[sp_info.second[sp_info.second[j]]] - M_num].size(); k++)
 			{
@@ -1165,15 +1155,15 @@ vector<vector<event_node*>>daily_nodes(int airport_num)
 	vector<vector<event_node*>>nodes(airport_num);
 	for (int i = 0; i<airport_num; i++)
 	{
-		nodes[i].push_back(new event_node(i, 0, NULL));
+		nodes[i].push_back(new event_node(i, 240, NULL));
 		int n = 0;
-		for (int t = 4; t <= 24; t += 4)
+		for (int t = 8; t <= 24; t += 4)
 		{
 			nodes[i].push_back(new event_node(i, t * 60, nodes[i][n]));
 			n++;
 		}
 	}
-	cout << "test:" << endl;
+	cout << "test:" <<nodes[1][0]->time<< endl;
 	cout << nodes[1].size() << endl;
 	return nodes;
 
@@ -1183,18 +1173,19 @@ vector<vector<event_node*>>weekly_nodes(int airport_num)
 	vector<vector<event_node*>>nodes(airport_num);
 	for (int i = 0; i<airport_num; i++)
 	{
-		nodes[i].push_back(new event_node(i, 0, NULL));
+		nodes[i].push_back(new event_node(i, 240, NULL));
 		int n = 0;
-		for (int t = 4; t <= 168; t += 4)
+		for (int t = 8; t <= 168; t += 4)
 		{
 			nodes[i].push_back(new event_node(i, t * 60, nodes[i][n]));
 			n++;
 		}
 	}
-	cout << "test:" << endl;
+	cout << "test:" << nodes[1][0]->time<< endl;
 	cout << nodes[1].size() << endl;
 	return nodes;
 }
+
 
 
 
@@ -1290,9 +1281,9 @@ vector<vector<G_arc*>>G_arc::get_day_ground_arcs(vector<vector<event_node*>>dail
 		{
 			G[j].push_back(new G_arc(daily_nodes_[j][i], daily_nodes_[j][i + 1]));
 		}
-		G[j].push_back(new G_arc(daily_nodes_[j][daily_nodes_.size() - 1], daily_nodes_[j][0]));      //过夜弧
+		G[j].push_back(new G_arc(daily_nodes_[j][daily_nodes_[j].size() - 1], daily_nodes_[j][0]));      //过夜弧
 	}
-	cout << "test:" << endl;
+	cout << "test:过夜弧" <<G[1][G[1].size()-1]->end_->time<< ","<<G[1][G[1].size() - 1] ->start_->time<< endl;
 	cout << G[1].size() << endl;
 	return G;
 }
@@ -1306,10 +1297,11 @@ vector<vector<G_arc*>>G_arc::get_week_ground_arcs(vector<vector<event_node*>>wee
 		{
 			G[j].push_back(new G_arc(weekly_nodes_[j][i], weekly_nodes_[j][i + 1]));
 		}
-		G[j].push_back(new G_arc(weekly_nodes_[j][weekly_nodes_.size() - 1], weekly_nodes_[j][0]));      //过夜弧
+		G[j].push_back(new G_arc(weekly_nodes_[j][weekly_nodes_[j].size() - 1], weekly_nodes_[j][0]));      //过夜弧
 	}
 
 	cout << "test:" << endl;
+	cout << "test:过夜弧" << G[1][G[1].size() - 1]->end_->time << "," << G[1][G[1].size() - 1]->start_->time << endl;
 	cout << G[1].size() << endl;
 	return G;
 
@@ -1325,7 +1317,7 @@ vector<leg*>leg::get_day_leglist(vector<vector<event_node*>>daily_nodes_, int ai
 	{
 		if (!is_base_(i, base_))            //不是维修机场
 		{
-			for (int j = 1; j < daily_nodes_[i].size() - 2; j++)        //最晚20点
+			for (int j = 0; j < daily_nodes_[i].size() - 1; j++)        //最晚20点
 			{
 				for (int k = 0; k < airport_num; k++)
 				{
@@ -1338,23 +1330,23 @@ vector<leg*>leg::get_day_leglist(vector<vector<event_node*>>daily_nodes_, int ai
 			}
 		}
 	}
-	for (int j = 1; j < (daily_nodes_[1].size() + 1) / 2; j++)
+	for (int j = 0; j < (daily_nodes_[1].size() + 1) / 2; j++)
 	{
 		day_leg_list.push_back(new leg(index, day_, 1, daily_nodes_[1][j]->time + (day_ - 1) * 1440, 3, daily_nodes_[3][j + 1]->time + (day_ - 1) * 1440 - Min_groundtime, 0, leg_vc, leg_fc, index));
 		index++;
 	}
-	for (int j = (daily_nodes_[0].size() - 1) / 2; j < daily_nodes_[0].size() - 2; j++)
+	for (int j = (daily_nodes_[0].size() - 1) / 2; j < daily_nodes_[0].size() - 1; j++)
 	{
 		day_leg_list.push_back(new leg(index, day_, 0, daily_nodes_[0][j]->time + (day_ - 1) * 1440, 1, daily_nodes_[1][j + 1]->time + (day_ - 1) * 1440 - Min_groundtime, 0, leg_vc, leg_fc, index));
 		index++;
 	}
 
-	for (int j = 1; j < (daily_nodes_[2].size() + 1) / 2; j++)
+	for (int j = 0; j < (daily_nodes_[2].size() + 1) / 2; j++)
 	{
 		day_leg_list.push_back(new leg(index, day_, 2, daily_nodes_[1][j]->time + (day_ - 1) * 1440, 4, daily_nodes_[4][j + 1]->time + (day_ - 1) * 1440 - Min_groundtime, 0, leg_vc, leg_fc, index));
 		index++;
 	}
-	for (int j = (daily_nodes_[3].size() - 1) / 2; j < daily_nodes_[3].size() - 2; j++)
+	for (int j = (daily_nodes_[3].size() - 1) / 2; j < daily_nodes_[3].size() - 1; j++)
 	{
 		day_leg_list.push_back(new leg(index, day_, 3, daily_nodes_[3][j]->time + (day_ - 1) * 1440, 2, daily_nodes_[2][j + 1]->time + (day_ - 1) * 1440 - Min_groundtime, 0, leg_vc, leg_fc, index));
 		index++;
@@ -2310,6 +2302,17 @@ public:
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
 #pragma once
 
 
@@ -2334,7 +2337,7 @@ public:
 	double var_cost;   //单位载重的燃油消耗成本--取决于fleet type?
 	double fixed_cost;  //空载成本+landcost
 
-						//子问题dual price
+	//子问题dual price
 	double capacity_dual;
 	double cover_dual;
 	double balance1_dual;
